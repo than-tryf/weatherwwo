@@ -44,7 +44,7 @@ func main() {
 	var sources []string
 
 	baseUrl := "http://api.worldweatheronline.com/premium/v1/past-weather.ashx"
-	apiKey :=  ""
+	apiKey :=  "?key=3dacac42551c42d2aa2192139192101"
 	location := "&q=Nicosia"
 	format := "&format=json"
 
@@ -82,22 +82,23 @@ func main() {
 		weatherObject := entities.WeatherPayload{}
 
 		json.NewDecoder(resp.Body).Decode(&weatherObject)
-		fmt.Println(weatherObject.Data.Weather)
 
-		for _, item := range weatherObject.Data.Weather{
+		//fmt.Println(weatherObject.Data.Weather)
+
+/*		for _, item := range weatherObject.Data.Weather{
 
 			fmt.Println(item)
 
 		}
-
+*/
 		csvFile, _ := os.OpenFile("weather.csv", os.O_RDWR|os.O_CREATE, os.ModePerm)
 		defer csvFile.Close()
+		//
+		//csvstruct.ReadStruct(weatherObject.Data.Weather)
 
-		csvWriter := struct2csv.NewWriter(csvFile)
+		writer := struct2csv.NewWriter(csvFile)
 
-		_ = csvWriter.WriteStruct(weatherObject)
-
-
+		_ = writer.WriteStructs(weatherObject.Data.Weather)
 
 
 		wg.Done()
